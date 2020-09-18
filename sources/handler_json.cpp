@@ -78,8 +78,8 @@ handler_json::handler_json(const std::string &jsonPath) {
         }
         std::cout << '|';
         std::cout << std::endl;
-        for (size_t i = 0; i < 4; ++i){
-            std::cout << std::setfill('-') << std::setw(weight_lines[i]) << '|';
+        for (size_t t = 0; t < 4; ++t){
+            std::cout << std::setfill('-') << std::setw(weight_lines[t]) << '|';
         }
         std::cout << '|' << std::endl;
         std::cout << std::setfill(' ');
