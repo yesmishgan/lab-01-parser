@@ -32,10 +32,6 @@ find_package(nlohmann_json CONFIG REQUIRED)
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 
-add_executable(main sources/student.cpp sources/handler_json.cpp)
-#target_link_libraries(include PUBLIC nlohmann_json::nlohmann_json)
-#target_link_libraries(tests PUBLIC nlohmann_json::nlohmann_json)
-
 # TODO: change template word to project name and delete this comment
 
 add_library(template STATIC
@@ -60,7 +56,7 @@ target_include_directories(tests
 #target_link_libraries(tests PUBLIC nlohmann_json::nlohmann_json GTest::main)
 # TODO: change template word to project name and delete this comment
 target_link_libraries(tests GTest::main template)
-
+target_link_libraries(template nlohmann_json::nlohmann_json)
 enable_testing()
 add_test(NAME unit_tests COMMAND tests) 
 
