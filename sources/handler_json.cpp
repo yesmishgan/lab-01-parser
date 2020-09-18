@@ -1,0 +1,87 @@
+
+// Copyright 2020 Dolbnin Mikhail dolbnin@protonmail.com
+
+#include "handler_json.hpp"
+#include "student.hpp"
+#include <iostream>
+#include <iomanip>
+//#include <nlohmann/json.hpp>
+
+handler_json::handler_json(const std::string &jsonPath) {
+    if (jsonPath.empty()){
+        throw std::invalid_argument("the path is't available");
+    }
+    std::ifstream file{jsonPath};
+    if (!file) {
+        throw std::out_of_range{"unable to open json: " + jsonPath};
+    }
+    json data;
+    file >> data;
+    if (!data.at("items").is_array()){
+        throw std::invalid_argument("JSON-file is not array. Try again");
+    }
+    if (data.at("items").size() != data.at("_meta").at("count")){
+        throw std::out_of_range("_meta.count != len(items)");
+    }
+    std::vector<Student> students;
+    for (auto const& student : data.at("items")) {
+        Student a(student);
+        students.push_back(a);
+    }
+    size_t size = 0;
+    for (auto i : students){
+        if (i.getName().length() > size){size = i.getName().length();}
+    }
+
+    weight_lines[0] = size + 3;
+
+    std::cout << std::left;
+    for (size_t i = 0; i < 4; ++i){
+        std::cout << std::setw(weight_lines[i]) << "| " + colomn[i];
+    }
+    std::cout << '|' << std::endl;
+    for (size_t i = 0; i < 4; ++i){
+        std::cout << std::setfill('-') << std::setw(weight_lines[i]) << '|';
+    }
+
+    std::cout << std::setfill(' ') << '|' << std::endl;
+    for (size_t i = 0; i < students.size(); ++i){
+        std::cout << std::left << std::setw(weight_lines[0])
+            << "| " + students[i].getName();
+        if ((std::any_cast<json> (students[i].getGroup())).is_number()){
+            std::cout << "| " << std::setw(weight_lines[1] - 2)
+            << std::any_cast<json> ((students[i].getGroup())).get<int>();
+        }else{
+            std::cout << "| " << std::setw(weight_lines[1] - 2)
+            << std::any_cast<json>
+                    ((students[i].getGroup())).get<std::string>();
+        }
+        std::cout << "| " << std::setw(weight_lines[2] - 2)
+        << students[i].getAvg();
+        if ((std::any_cast<json> (students[i].getDebt()).is_array())){
+            if ((std::any_cast<json> (students[i].getDebt()).size()) > 1){
+                std::cout << "| "
+                << std::any_cast<json> (students[i].getDebt()).size()
+                << std::setw(weight_lines[3] - 3) << " items";
+            }else{
+                std::vector<std::string> g =
+                        std::any_cast<json>
+                                (students[i].getDebt())
+                                .get<std::vector<std::string>>();
+                std::cout << "| " << std::setw(weight_lines[3] - 2) << g[0];
+            }
+        }else if ((std::any_cast<json> (students[i].getDebt()).is_string())){
+            std::cout << "| " << std::setw(weight_lines[3] - 2) <<
+                std::any_cast<json>(students[i].getDebt()).get<std::string>();
+        }else{
+            std::cout << std::setw(weight_lines[3]) << "| null";
+        }
+        std::cout << '|';
+        std::cout << std::endl;
+        for (size_t i = 0; i < 4; ++i){
+            std::cout << std::setfill('-') << std::setw(weight_lines[i]) << '|';
+        }
+        std::cout << '|' << std::endl;
+        std::cout << std::setfill(' ');
+    }
+}
