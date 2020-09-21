@@ -9,7 +9,7 @@
 
 handler_json::handler_json(const std::string &jsonPath) {
     json data;
-    if(jsonPath[0] != '{') {
+    if (jsonPath[0] != '{') {
         if (jsonPath.empty()) {
             throw std::invalid_argument("the path is't available");
         }
