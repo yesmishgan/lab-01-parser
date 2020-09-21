@@ -9,13 +9,17 @@ using nlohmann::json;
 Student::Student() {}
 
 Student::Student(const json &j) {
+    if (j.empty()){
+        throw std::invalid_argument("Object student is empty");
+    }
     Name = j.at("name").get<std::string>();
     Group = std::any{j.at("group")};
     if (j.at("avg").is_string()) {
         Avg = std::stod(j.at("avg").get<std::string>());
-    }
-    if (j.at("avg").is_number()) {
+    } else if (j.at("avg").is_number()) {
         Avg = j.at("avg").get<double>();
+    }else{
+        throw std::invalid_argument("Avg cannot be another type!");
     }
     Debt = std::any{j.at("debt")};
 }

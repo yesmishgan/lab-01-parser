@@ -21,6 +21,9 @@ handler_json::handler_json(const std::string &jsonPath) {
     }else{
         data = json::parse(jsonPath);
     }
+    if (data.empty()){
+        throw std::invalid_argument("Object array is empty");
+    }
     if (!data.at("items").is_array()){
         throw std::invalid_argument("JSON-file is not array. Try again");
     }

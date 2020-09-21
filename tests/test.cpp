@@ -8,6 +8,23 @@ TEST(handler_json, empty_path){
     ASSERT_THROW(handler_json(""), std::invalid_argument);
 }
 
+TEST(handler_json, empty_student){
+    ASSERT_THROW(Student(json::parse(R"({})")), std::invalid_argument);
+}
+
+TEST(handler_json, empty_array){
+    ASSERT_THROW(handler_json(json::parse(R"({})")), std::invalid_argument);
+}
+
+TEST(handler_json, incorrect_avg){
+    ASSERT_THROW(handler_json(json::parse(R"({
+      "name": "Ivanov Petr",
+      "group": "1",
+      "avg": [],
+      "debt": "AY"
+    })")), std::invalid_argument);
+}
+
 TEST(handler_json, invalid_path){
     ASSERT_THROW(handler_json("/sd.json"), std::out_of_range);
 }
