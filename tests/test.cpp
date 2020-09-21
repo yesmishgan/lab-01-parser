@@ -13,7 +13,9 @@ TEST(handler_json, invalid_path){
 }
 
 TEST(handler_json, json_is_not_array){
-    ASSERT_THROW(handler_json("../tests/is_not_array.json"),
+    ASSERT_THROW(handler_json(R"({
+  "items" : 5
+})"),
             std::invalid_argument);
 }
 

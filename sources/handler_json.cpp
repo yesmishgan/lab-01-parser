@@ -8,15 +8,19 @@
 #include <sstream>
 
 handler_json::handler_json(const std::string &jsonPath) {
-    if (jsonPath.empty()){
-        throw std::invalid_argument("the path is't available");
-    }
-    std::ifstream file{jsonPath};
-    if (!file) {
-        throw std::out_of_range{"unable to open json: " + jsonPath};
-    }
     json data;
-    file >> data;
+    if(jsonPath[0] != '{') {
+        if (jsonPath.empty()) {
+            throw std::invalid_argument("the path is't available");
+        }
+        std::ifstream file{jsonPath};
+        if (!file) {
+            throw std::out_of_range{"unable to open json: " + jsonPath};
+        }
+        file >> data;
+    }else{
+        data = json::parse(jsonPath);
+    }
     if (!data.at("items").is_array()){
         throw std::invalid_argument("JSON-file is not array. Try again");
     }
