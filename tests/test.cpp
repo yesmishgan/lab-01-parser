@@ -37,7 +37,7 @@ TEST(handler_json, json_is_not_array){
 }
 
 TEST(handler_json, size_test){
-    handler_json a(R"({
+    ASSERT_THROW(handler_json(R"({
   "items": [
     {
       "name": "Ivanov Petr",
@@ -63,10 +63,9 @@ TEST(handler_json, size_test){
     }
   ],
   "_meta": {
-    "count": 3
+    "count": 5
   }
-})");
-    ASSERT_EQ(a.size_meta(), 3);
+})"), std::out_of_range);
 }
 
 TEST(handler_json, correct_input_1){

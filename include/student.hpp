@@ -13,7 +13,6 @@ using nlohmann::json;
 
 struct Student {
 public:
-    Student();
     explicit Student(const json& j);
     const std::string& getName();
     const std::any getGroup();

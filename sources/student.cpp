@@ -6,8 +6,6 @@
 
 using nlohmann::json;
 
-Student::Student() {}
-
 Student::Student(const json &j) {
     if (j.empty()){
         throw std::invalid_argument("Object student is empty");
