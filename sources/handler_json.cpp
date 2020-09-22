@@ -17,7 +17,7 @@ handler_json::handler_json(const std::string &jsonPath) {
         if (!file) {
             throw std::out_of_range{"unable to open json: " + jsonPath};
         }
-        if(!(file >> data)){
+        if (!(file >> data)){
             throw std::out_of_range("Incorrect json");
         }
     }else{
