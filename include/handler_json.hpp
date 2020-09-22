@@ -17,7 +17,6 @@ using nlohmann::json;
 class handler_json {
 public:
     explicit handler_json(const std::string &json_path);
-    int size_meta();
     std::string getStudent(size_t i);
 private:
     std::vector<int> weight_lines = {20, 10, 7, 15};

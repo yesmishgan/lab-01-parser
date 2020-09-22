@@ -94,8 +94,6 @@ handler_json::handler_json(const std::string &jsonPath) {
     }
 }
 
-int handler_json::size_meta() {return size_arr;}
-
 std::string handler_json::getStudent(size_t i) {
     std::stringstream ss;
     ss << std::left << std::setw(weight_lines[0])
