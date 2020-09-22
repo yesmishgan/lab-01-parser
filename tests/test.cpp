@@ -69,11 +69,11 @@ TEST(handler_json, json_is_not_array){
 }
 
 TEST(handler_json, correct_object){
-    ASSERT_THROW(handler_json("test.json"), std::out_of_range);
+    ASSERT_THROW(handler_json("tes.json"), std::out_of_range);
 }
 
 TEST(handler_json, open_file){
-    handler_json a("test.json");
+    handler_json a("../test.json");
     ASSERT_EQ(a.getStudent(0),
               "| Ivanov Petr   | 1       | 4.25 | null         |");
 }
