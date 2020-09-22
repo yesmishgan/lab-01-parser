@@ -17,9 +17,7 @@ handler_json::handler_json(const std::string &jsonPath) {
         if (!file) {
             throw std::out_of_range{"unable to open json: " + jsonPath};
         }
-        if (!(file >> data)){
-            throw std::out_of_range("Incorrect json");
-        }
+        file >> data;
     }else{
         data = json::parse(jsonPath);
     }
@@ -75,8 +73,7 @@ handler_json::handler_json(const std::string &jsonPath) {
                 << std::setw(weight_lines[3] - 3) << " items";
             }else{
                 std::vector<std::string> g =
-                        std::any_cast<json>
-                                (students[i].getDebt())
+                        std::any_cast<json>(students[i].getDebt())
                                 .get<std::vector<std::string>>();
                 std::cout << "| " << std::setw(weight_lines[3] - 2) << g[0];
             }
@@ -117,8 +114,7 @@ std::string handler_json::getStudent(size_t i) {
                       << std::setw(weight_lines[3] - 3) << " items";
         }else{
             std::vector<std::string> g =
-                    std::any_cast<json>
-                            (students[i].getDebt())
+                    std::any_cast<json>(students[i].getDebt())
                             .get<std::vector<std::string>>();
             ss << "| " << std::setw(weight_lines[3] - 2) << g[0];
         }
