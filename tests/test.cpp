@@ -36,6 +36,10 @@ TEST(handler_json, json_is_not_array){
             std::invalid_argument);
 }
 
+TEST(handler_json, correct_object){
+    ASSERT_THROW(handler_json("test.json"), std::out_of_range);
+}
+
 TEST(handler_json, size_test){
     ASSERT_THROW(handler_json(R"({
   "items": [
