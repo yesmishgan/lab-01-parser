@@ -13,11 +13,11 @@ TEST(handler_json, empty_student){
 }
 
 TEST(handler_json, empty_array){
-    ASSERT_THROW(handler_json(json::parse(R"({})")), std::invalid_argument);
+    ASSERT_THROW(handler_json((R"({})")), std::invalid_argument);
 }
 
 TEST(handler_json, incorrect_avg){
-    ASSERT_THROW(handler_json(json::parse(R"({
+    ASSERT_THROW(Student(json::parse(R"({
       "name": "Ivanov Petr",
       "group": "1",
       "avg": [],
@@ -37,7 +37,35 @@ TEST(handler_json, json_is_not_array){
 }
 
 TEST(handler_json, size_test){
-    handler_json a("../tests/test.json");
+    handler_json a(R"({
+  "items": [
+    {
+      "name": "Ivanov Petr",
+      "group": "1",
+      "avg": "4.25",
+      "debt": null
+    },
+    {
+      "name": "Sidorov Ivan",
+      "group": 31,
+      "avg": 4,
+      "debt": "C++"
+    },
+    {
+      "name": "Pertov Nikita",
+      "group": "IU8-31",
+      "avg": 3.33,
+      "debt": [
+        "C++",
+        "Linux",
+        "Network"
+      ]
+    }
+  ],
+  "_meta": {
+    "count": 3
+  }
+})");
     ASSERT_EQ(a.size_meta(), 3);
 }
 
@@ -68,7 +96,35 @@ TEST(handler_json, correct_input_2){
 }
 
 TEST(handler_json, correct_out){
-    handler_json a("../tests/test.json");
+    handler_json a(R"({
+  "items": [
+    {
+      "name": "Ivanov Petr",
+      "group": "1",
+      "avg": "4.25",
+      "debt": null
+    },
+    {
+      "name": "Sidorov Ivan",
+      "group": 31,
+      "avg": 4,
+      "debt": "C++"
+    },
+    {
+      "name": "Pertov Nikita",
+      "group": "IU8-31",
+      "avg": 3.33,
+      "debt": [
+        "C++",
+        "Linux",
+        "Network"
+      ]
+    }
+  ],
+  "_meta": {
+    "count": 3
+  }
+})");
     ASSERT_EQ(a.getStudent(0),
             "| Ivanov Petr   | 1       | 4.25 | null         |");
     ASSERT_EQ(a.getStudent(1),
