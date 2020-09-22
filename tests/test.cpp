@@ -29,6 +29,38 @@ TEST(handler_json, invalid_path){
     ASSERT_THROW(handler_json("/sd.json"), std::out_of_range);
 }
 
+TEST(handler_json, simple_array){
+    handler_json a(R"({
+  "items": [
+    {
+      "name": "Ivanov Petr",
+      "group": "1",
+      "avg": "4.25",
+      "debt": null
+    },
+    {
+      "name": "Sidorov Ivan",
+      "group": 31,
+      "avg": 4,
+      "debt": "C++"
+    },
+    {
+      "name": "Pertov Nikita",
+      "group": "IU8-31",
+      "avg": 3.33,
+      "debt": [
+        "Network"
+      ]
+    }
+  ],
+  "_meta": {
+    "count": 3
+  }
+})");
+    ASSERT_EQ(a.getStudent(2),
+            "| Pertov Nikita | IU8-31  | 3.33 | Network      |");
+}
+
 TEST(handler_json, json_is_not_array){
     ASSERT_THROW(handler_json(R"({
   "items" : 5
