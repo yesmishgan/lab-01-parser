@@ -13,7 +13,7 @@ handler_json::handler_json(const std::string &jsonPath) {
         if (jsonPath.empty()) {
             throw std::invalid_argument("the path is't available");
         }
-        std::ifstream file{jsonPath};
+        std::ifstream file(jsonPath);
         if (!file) {
             throw std::out_of_range{"unable to open json: " + jsonPath};
         }

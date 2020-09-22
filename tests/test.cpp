@@ -72,6 +72,12 @@ TEST(handler_json, correct_object){
     ASSERT_THROW(handler_json("test.json"), std::out_of_range);
 }
 
+TEST(handler_json, open_file){
+    handler_json a("test.json");
+    ASSERT_EQ(a.getStudent(0),
+              "| Ivanov Petr   | 1       | 4.25 | null         |");
+}
+
 TEST(handler_json, size_test){
     ASSERT_THROW(handler_json(R"({
   "items": [
