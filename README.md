@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/yesmishgan/lab-01-parser.svg?branch=wp%2Flab4)](https://travis-ci.com/yesmishgan/lab-01-parser)
+
 # Лабораторная работа № 1
 
 ## Задание
