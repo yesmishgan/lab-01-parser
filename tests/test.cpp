@@ -73,7 +73,7 @@ TEST(handler_json, correct_object){
 }
 
 TEST(handler_json, open_file){
-    handler_json a("../test.json");
+    handler_json a("./sources/test.json");
     ASSERT_EQ(a.getStudent(0),
               "| Ivanov Petr   | 1       | 4.25 | null         |");
 }
