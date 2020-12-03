@@ -5,25 +5,33 @@
 #include "student.hpp"
 #include <iostream>
 #include <iomanip>
-//#include <nlohmann/json.hpp>
+#include <sstream>
 
 handler_json::handler_json(const std::string &jsonPath) {
-    if (jsonPath.empty()){
-        throw std::invalid_argument("the path is't available");
-    }
-    std::ifstream file{jsonPath};
-    if (!file) {
-        throw std::out_of_range{"unable to open json: " + jsonPath};
-    }
     json data;
-    file >> data;
+    if (jsonPath[0] != '{') {
+        if (jsonPath.empty()) {
+            throw std::invalid_argument("the path is't available");
+        }
+        std::ifstream file(jsonPath);
+        if (!file) {
+            throw std::out_of_range{"unable to open json: " + jsonPath};
+        }
+        file >> data;
+    }else{
+        data = json::parse(jsonPath);
+    }
+    if (data.empty()){
+        throw std::invalid_argument("Object array is empty");
+    }
     if (!data.at("items").is_array()){
         throw std::invalid_argument("JSON-file is not array. Try again");
     }
     if (data.at("items").size() != data.at("_meta").at("count")){
         throw std::out_of_range("_meta.count != len(items)");
     }
-    std::vector<Student> students;
+    size_arr = data.at("items").size();
+    //size_arr = data.at("items").size();
     for (auto const& student : data.at("items")) {
         Student a(student);
         students.push_back(a);
@@ -65,8 +73,7 @@ handler_json::handler_json(const std::string &jsonPath) {
                 << std::setw(weight_lines[3] - 3) << " items";
             }else{
                 std::vector<std::string> g =
-                        std::any_cast<json>
-                                (students[i].getDebt())
+                        std::any_cast<json>(students[i].getDebt())
                                 .get<std::vector<std::string>>();
                 std::cout << "| " << std::setw(weight_lines[3] - 2) << g[0];
             }
@@ -78,10 +85,45 @@ handler_json::handler_json(const std::string &jsonPath) {
         }
         std::cout << '|';
         std::cout << std::endl;
-        for (size_t i = 0; i < 4; ++i){
-            std::cout << std::setfill('-') << std::setw(weight_lines[i]) << '|';
+        for (size_t t = 0; t < 4; ++t){
+            std::cout << std::setfill('-') << std::setw(weight_lines[t]) << '|';
         }
         std::cout << '|' << std::endl;
         std::cout << std::setfill(' ');
     }
+}
+
+std::string handler_json::getStudent(size_t i) {
+    std::stringstream ss;
+    ss << std::left << std::setw(weight_lines[0])
+              << "| " + students[i].getName();
+    if ((std::any_cast<json> (students[i].getGroup())).is_number()){
+        ss << "| " << std::setw(weight_lines[1] - 2)
+                  << std::any_cast<json> ((students[i].getGroup())).get<int>();
+    }else{
+        ss << "| " << std::setw(weight_lines[1] - 2)
+                  << std::any_cast<json>
+                          ((students[i].getGroup())).get<std::string>();
+    }
+    ss << "| " << std::setw(weight_lines[2] - 2)
+              << students[i].getAvg();
+    if ((std::any_cast<json> (students[i].getDebt()).is_array())){
+        if ((std::any_cast<json> (students[i].getDebt()).size()) > 1){
+            ss << "| "
+                      << std::any_cast<json> (students[i].getDebt()).size()
+                      << std::setw(weight_lines[3] - 3) << " items";
+        }else{
+            std::vector<std::string> g =
+                    std::any_cast<json>(students[i].getDebt())
+                            .get<std::vector<std::string>>();
+            ss << "| " << std::setw(weight_lines[3] - 2) << g[0];
+        }
+    }else if ((std::any_cast<json> (students[i].getDebt()).is_string())){
+        ss << "| " << std::setw(weight_lines[3] - 2) <<
+                  std::any_cast<json>(students[i].getDebt()).get<std::string>();
+    }else{
+        ss << std::setw(weight_lines[3]) << "| null";
+    }
+    ss << '|';
+    return ss.str();
 }
